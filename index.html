@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Что это?</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Что это?">
+<meta name="theme-color" content="#8FD0FF">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&display=swap">
+<style>
+/* Layout: landscape one-screen app. Painted scene fills the screen height; live wooden UI sits in the corners. Portrait shows a "turn the phone" screen. */
+:root{
+  --ink:#2E2350;
+  --wood-hi:#C8854C; --wood:#9A5A2C; --wood-lo:#6B3818; --wood-edge:#4A250F;
+  --green:#5DB43C; --green-lo:#3E8E25; --purple:#7E5BEF; --purple-lo:#5A3DC8;
+  --sl:env(safe-area-inset-left,0px); --sr:env(safe-area-inset-right,0px); --st:env(safe-area-inset-top,0px); --sb:env(safe-area-inset-bottom,0px);
+  --body:"Nunito",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:#5E3A1E;color:var(--ink);font-family:var(--body);overflow:hidden;position:fixed;inset:0;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+img{-webkit-user-drag:none;pointer-events:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0;touch-action:manipulation}
+button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+[hidden]{display:none!important}
+.app{position:fixed;inset:0;overflow:hidden}
+
+.title{font-weight:900;line-height:1;letter-spacing:-.01em;display:inline-block;
+  background:linear-gradient(#FFF2A8 0%,#FFD23F 45%,#F6A61E 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-stroke:2px #8A4A16;paint-order:stroke fill;filter:drop-shadow(0 3px 0 #6B3410) drop-shadow(0 6px 6px rgba(0,0,0,.25))}
+.tline{display:flex;align-items:center;justify-content:center;gap:6px}
+.sprig{width:34px;height:auto;flex:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}
+.sprig.r{transform:scaleX(-1)}
+
+.wood{background:
+   repeating-linear-gradient(92deg,rgba(255,255,255,.05) 0 3px,rgba(0,0,0,.05) 3px 7px,transparent 7px 13px),
+   linear-gradient(180deg,var(--wood-hi),var(--wood) 55%,var(--wood-lo));
+  box-shadow:inset 0 2px 0 rgba(255,220,170,.55),inset 0 -3px 0 rgba(0,0,0,.25),0 0 0 3px var(--wood-edge),0 5px 0 3px rgba(60,28,8,.55),0 8px 14px rgba(0,0,0,.25)}
+.purple .wood{background:linear-gradient(180deg,#A58BFF,var(--purple) 55%,var(--purple-lo));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.45),inset 0 -3px 0 rgba(0,0,0,.2),0 0 0 3px #3F2A9A,0 5px 0 3px rgba(40,20,110,.5),0 8px 14px rgba(0,0,0,.25)}
+
+/* ---------- scene ---------- */
+.backdrop{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(18px) brightness(.85);transform:scale(1.05)}
+.view{position:absolute;inset:0;overflow:hidden}
+.view.py{overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.view::-webkit-scrollbar{display:none}
+.stage{position:absolute;border-radius:18px;overflow:hidden;box-shadow:0 0 0 4px var(--wood),0 0 0 7px var(--wood-edge),0 10px 30px rgba(0,0,0,.45)}
+.stage.full{border-radius:0;box-shadow:none}
+.stage>img.bg{position:absolute;inset:0;width:100%;height:100%}
+.z{position:absolute;border-radius:22%}
+.glow{position:absolute;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,255,255,.75) 0,rgba(255,250,200,.35) 45%,transparent 70%);animation:glow .8s ease-out forwards}
+@keyframes glow{0%{transform:translate(-50%,-50%) scale(.4);opacity:0}25%{opacity:1}100%{transform:translate(-50%,-50%) scale(1.25);opacity:0}}
+.tag{position:absolute;transform:translate(-50%,-100%);pointer-events:none;background:#fff;color:var(--ink);font-weight:900;font-size:22px;
+  padding:6px 16px;border-radius:999px;box-shadow:0 4px 0 rgba(46,35,80,.2),0 8px 16px rgba(0,0,0,.2);white-space:nowrap;animation:tag 1.4s ease-out forwards;z-index:3}
+@keyframes tag{0%{transform:translate(-50%,-60%) scale(.5);opacity:0}15%{transform:translate(-50%,-110%) scale(1.08);opacity:1}75%{transform:translate(-50%,-115%) scale(1);opacity:1}100%{transform:translate(-50%,-140%);opacity:0}}
+.spark{position:absolute;width:12px;height:12px;border-radius:50%;pointer-events:none;animation:fly .7s ease-out forwards}
+@keyframes fly{from{transform:translate(-50%,-50%) scale(1);opacity:1}to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.2);opacity:0}}
+.z.hint{animation:hint 1s ease-in-out 3;background:radial-gradient(circle,rgba(255,255,255,.6),transparent 70%)}
+@keyframes hint{0%,100%{opacity:.2}50%{opacity:1}}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{translate:0}25%{translate:-8px}75%{translate:8px}}
+
+.corner{position:absolute;z-index:5;display:flex;align-items:center;gap:10px}
+.tl{top:calc(10px + var(--st));left:calc(12px + var(--sl))}
+.tr{top:calc(10px + var(--st));right:calc(12px + var(--sr))}
+.bl{bottom:calc(10px + var(--sb));left:calc(12px + var(--sl))}
+.br{bottom:calc(10px + var(--sb));right:calc(12px + var(--sr))}
+.back,.round{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;flex:none}
+.back svg{width:26px;height:26px;filter:drop-shadow(0 2px 0 rgba(70,30,5,.8))}
+.round svg{width:26px;height:26px;filter:drop-shadow(0 2px 0 rgba(70,30,5,.8))}
+.round.off{filter:saturate(.3) brightness(.85)}
+.toggle{position:relative;display:flex;padding:5px;border-radius:999px}
+.toggle .track{display:flex;border-radius:999px;background:rgba(60,26,6,.55);box-shadow:inset 0 2px 4px rgba(0,0,0,.45);padding:3px}
+.toggle button{padding:8px 14px;border-radius:999px;font-weight:900;font-size:16px;color:#FFF3DF;text-shadow:0 2px 0 rgba(60,25,5,.8)}
+.toggle button[aria-pressed="true"]{background:linear-gradient(#8FDA5A,var(--green) 55%,var(--green-lo));box-shadow:inset 0 2px 0 rgba(230,255,200,.7),0 2px 3px rgba(0,0,0,.35)}
+.purple .toggle .track{background:rgba(40,18,120,.45)}
+.purple .toggle button[aria-pressed="true"]{background:linear-gradient(#B8A2FF,#8C6CF5);box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 2px 3px rgba(0,0,0,.3)}
+.leaf{position:absolute;right:-6px;top:-14px;width:40px;pointer-events:none}
+.count{display:flex;align-items:center;gap:4px;padding:4px 14px 4px 6px;border-radius:999px;color:#FFF3DF;font-weight:900;font-size:20px;text-shadow:0 2px 0 rgba(60,25,5,.8);font-variant-numeric:tabular-nums}
+.count img{width:30px;height:30px}
+.bubble{display:flex;align-items:center;gap:10px;padding:6px 18px 6px 6px;border-radius:999px;max-width:min(46vw,380px)}
+.bubble .ic{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;background:linear-gradient(#7E4220,#5E2F12)}
+.bubble .ic img{width:34px;height:34px}
+.bubble .bt{font-weight:900;font-size:20px;color:#fff;text-shadow:0 2px 0 rgba(40,20,5,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.bubble.in{animation:bin .35s cubic-bezier(.3,1.6,.5,1)}
+@keyframes bin{from{transform:scale(.8)}to{transform:scale(1)}}
+
+/* ---------- home ---------- */
+.home{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(12px + var(--st)) calc(16px + var(--sr)) calc(28px + var(--sb)) calc(16px + var(--sl));
+  background:linear-gradient(#8FD0FF 0,#CBEBFF 46%,#9ED96F 46.1%,#7CC655 100%)}
+.home .head{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1000px;margin:0 auto 14px}
+.home .head .title{font-size:44px}
+.home h2{margin:22px auto 14px;max-width:1000px}
+.home h2 .title{font-size:30px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:22px 16px;max-width:1000px;margin:0 auto}
+.card{position:relative;border-radius:22px;padding:6px;transition:transform .15s}
+.card:active{transform:scale(.96)}
+.card .pic{display:block;width:100%;aspect-ratio:4/3;border-radius:17px;background-size:cover;background-position:center;box-shadow:inset 0 0 0 2px rgba(0,0,0,.15)}
+.card .plq{position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);padding:5px 14px;border-radius:999px;font-weight:900;font-size:16px;color:#FFF3DF;text-shadow:0 2px 0 rgba(60,25,5,.8);white-space:nowrap}
+
+/* ---------- turn the phone ---------- */
+.rotate{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:24px;
+  background:linear-gradient(#8FD0FF,#CBEBFF 60%,#9ED96F 60.1%,#7CC655)}
+.rotate svg{width:120px;height:120px;animation:turn 2.4s ease-in-out infinite}
+@keyframes turn{0%,20%{transform:rotate(0)}50%,80%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
+.rotate .title{font-size:34px}
+@media (orientation:portrait) and (max-aspect-ratio:9/10){.rotate{display:flex}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="rotate" aria-live="polite">
+  <svg viewBox="0 0 120 120"><rect x="38" y="14" width="44" height="92" rx="10" fill="#fff" stroke="#6B3818" stroke-width="5"/><rect x="45" y="24" width="30" height="66" rx="4" fill="#8FD0FF"/><circle cx="60" cy="98" r="3.5" fill="#6B3818"/></svg>
+  <span class="title">Поверни телефон</span>
+</div>
+<script>
+const WORDS = {
+ hair:["волосы"],brow:["бровь"],eye:["глаз"],ear:["ухо"],nose:["нос"],cheek:["щёчка"],mouth:["рот"],face:["лицо"],hand:["ладошка"],hoodie:["кофта"],pants:["штанишки"],
+ shelf:["полка"],pan:["сковородка"],teapot:["чайник"],salt:["соль"],cup:["чашка"],milk:["молоко"],bread:["хлеб"],plate:["тарелка"],apple:["яблоко"],banana:["банан"],cheese:["сыр"],carrot:["морковка"],spoon:["ложка"],egg:["яйцо"],
+ road:["дорога"],cloud:["облако"],sun:["солнышко"],bird:["птичка"],house:["дом"],tree:["дерево"],light:["светофор"],bike:["велосипед"],tulip:["цветок"],butterfly:["бабочка"],dog:["собака",1],car:["машина",1],bus:["автобус"],
+ barn:["сарай"],hay:["сено"],fence:["забор"],tractor:["трактор"],cow:["корова",1],sheep:["овечка",1],chick:["цыплёнок",1],horse:["лошадь",1],pig:["свинья",1],rooster:["петух",1],hen:["курица",1],duck:["утка",1],goat:["коза",1],
+ treehouse:["домик"],fireman:["пожарный"],cook:["повар"],doctor:["врач"],police:["полицейский"],baby:["малыш"],mom:["мама"],granny:["бабушка"],grandpa:["дедушка"],girl:["девочка"],boy:["мальчик"],
+ palm:["пальма"],river:["речка"],monkey:["обезьянка"],parrot:["попугай"],giraffe:["жираф"],elephant:["слон"],zebra:["зебра"],lion:["лев",1],croc:["крокодил"],
+ turnip:["репка"],granddaughter:["внучка"],mouse:["мышка"],sunflower:["подсолнух"],wateringcan:["лейка"],bucket:["ведро"],cat:["кошка",1],teremok:["теремок"],hare:["зайчик"],stump:["пенёк"],
+ frog:["лягушка",1],wolf:["волк",1],fox:["лиса"],bear:["медведь",1],fir:["ёлка"],hen2:["курочка"],nest:["гнездо"],goldegg:["золотое яичко"],stove:["печка"],samovar:["самовар"],broom:["метла"],table:["стол"],bench:["лавка"],window:["окно"],
+ shebear:["медведица"],cub:["мишутка"],bowl:["миска"],crib:["кроватка"],lamp:["лампа"],chair:["стул"],door:["дверь"],redhood:["Красная Шапочка"],basket:["корзинка"],pies:["пирожки"],woodcutter:["дровосек"],squirrel:["белка"],mushroom:["гриб"]
+};
+
+/* zones: [word, left, top, right, bottom] in % of the picture; later entries sit on top */
+const SCENES = [
+ {id:'farm',name:'Ферма',w:1174,h:2382,title:true,theme:'',bubble:'b-white',vine:true,icon:'cow',deco:'leaf',zones:[
+  ['barn',0,21,40,37],['hay',0,36,22,43],['tree',84,26,100,35],['fence',76,45,100,51],['fence',0,43,17,51],['tractor',60,31,91,44],
+  ['cow',2,45,46,65],['sheep',59,47,76,55],['sheep',79,50,97,58],['chick',44,53,61,58.5],['chick',2,63.5,13,70],['chick',44,80.5,54,86.5],['tulip',52,58.5,61,63.5],
+  ['horse',61,56,99,78],['pig',19,65,50,79],['rooster',1,77.5,18,87],['hen',22,78.5,36,87],['duck',62,78.5,77,87],['goat',80,76.5,97,87]]},
+ {id:'face',name:'Малыш',w:1184,h:2382,title:true,theme:'',bubble:'b-wood',icon:'smile',deco:'leaf',zones:[
+  ['pants',32,82,67,89],['hoodie',20,56,80,83],['face',25,34,77,58],['hair',18,20,85,36],['ear',19,43,30,51],['ear',72,43,83,51],
+  ['brow',33,35.5,47,39.5],['brow',54,35.5,69,39.5],['eye',33,39.5,47,46],['eye',54,39.5,68,46],['cheek',28,45.5,41,51.5],['cheek',61,45.5,74,51.5],
+  ['nose',45,43.5,56,49.5],['mouth',39,49.5,61,55.5],['hand',3,50.5,26,61.5],['hand',75,50.5,97,61.5]]},
+ {id:'kitchen',name:'Кухня',w:1174,h:2382,title:true,theme:'',bubble:'b-white',icon:'magnifier',deco:'leaf',zones:[
+  ['shelf',5,30,97,34],['shelf',5,47.5,97,51.5],['pan',9,20,38,30],['teapot',39,19.5,68,30.5],['teapot',0,51.5,11,60],['salt',76,21,90,30.5],
+  ['cup',14,41,34,49.5],['milk',45,40,61,49.5],['bread',70,40.5,91,49.5],['plate',88,54,100,62],
+  ['apple',9,60.5,26,68.5],['banana',41,60,59,69],['cheese',74,60,92,69],['carrot',12,73.5,30,82.5],['spoon',43,73.5,60,82.5],['egg',76,74.5,90,82]]},
+ {id:'street',name:'Улица',w:1174,h:2382,title:false,theme:'green',bubble:'b-wood',icon:'cow',deco:'star',zones:[
+  ['road',0,79.5,100,88],['cloud',10,18.5,40,27],['cloud',0,28.5,30,38],['cloud',69,31.5,100,40],['sun',72,16.5,93,28],['bird',50,26.5,63,33.5],
+  ['house',6,39.5,31,51],['tree',41,38,63,51.5],['light',81,42,92,52],['bike',6,59.5,23,66.5],['tulip',37,58.5,47,65.5],['butterfly',58,56,71,62.5],
+  ['dog',25,65,40,73],['dog',79,59.5,97,68],['car',10,72.5,41,83.5],['bus',64,73.5,89,83]]},
+ {id:'people',name:'Люди',w:1184,h:2382,title:false,theme:'purple',bubble:'b-purple',icon:'smile',deco:'star',zones:[
+  ['tree',0,13,100,20],['tree',36,67,64,80],['treehouse',8,24,92,52],['fireman',8,16,36,30.5],['fireman',15,33.5,34,50],['cook',56,14,81,29.5],
+  ['doctor',43,35.5,64,49.5],['police',72,33.5,94,46.5],['baby',38,57,56,67.5],['baby',55.5,55.5,67,63.5],['mom',66,52.5,85,66.5],
+  ['granny',8,73.5,27,86],['grandpa',30,72.5,50,86],['girl',63,73,81,86],['boy',80,73.5,97,90]]},
+ {id:'zoo',name:'Зоопарк',w:1174,h:2382,title:false,theme:'green',bubble:'b-jungle',vine:true,icon:'lion',deco:'star',zones:[
+  ['tree',8,12,42,48],['palm',0,25,20,48],['palm',72,28,100,48],['river',40,43.5,86,52.5],['monkey',69,13.5,94,28.5],['parrot',45,26,62,35.5],
+  ['giraffe',0,43.5,29,71.5],['elephant',31,51.5,72,68],['zebra',75,51,100,70.5],['lion',2,66,40,85.5],['croc',57,72.5,96,82.5]]}
+];
+/* fairy tales: wide pictures, zones given in % of the original panel and mapped through its crop */
+const TALES = [
+ {id:'repka',name:'Репка',w:1882,h:1500,crop:[2,5,94,96],icon:'smile',zones:[
+  ['turnip',7,12,40,82],['treehouse',66,13,95,48],['fence',47,38,62,50],['sunflower',58,33,68,41],['sunflower',86,38,95,50],['wateringcan',61,46,68,53],['wateringcan',81,52,92,64],
+  ['grandpa',35,40,55,82],['granddaughter',50,52,64,82],['dog',63,60,78,82],['cat',75,62,88,80],['mouse',88,67,96,77],['bucket',86,81,96,93],['carrot',38,86,46,96],['carrot',58,86,64,94]]},
+ {id:'teremok',name:'Теремок',w:1901,h:1500,crop:[1.5,3,97.5,95.5],icon:'fox',zones:[
+  ['fir',3,15,24,55],['fir',62,15,88,52],['teremok',20,10,70,75],['frog',47,29,55,40],['mouse',28,52,35,62],['wolf',46,53,56,70],['hare',23,62,34,85],['fox',33,62,45,84],['bear',65,45,90,91],
+  ['stump',11,81,28,94],['stump',28,88,38,96],['stump',14,64,22,70],['butterfly',7,65,13,72],['butterfly',4,77,10,84],['butterfly',89,37,95,44],['butterfly',93,66,98,71],['tulip',90,82,98,92]]},
+ {id:'ryaba',name:'Курочка Ряба',w:1846,h:1500,crop:[10,5,96.5,93.5],icon:'hen',zones:[
+  ['window',11,20,34,55],['stove',70,13,97,78],['nest',10,62,40,76],['hen2',15,44,35,68],['table',26,70,70,92],['goldegg',45,60,55,73],['grandpa',40,33,60,65],['granny',58,38,76,82],
+  ['samovar',87,20,98,38],['broom',86,48,98,84],['mouse',70,84,90,95],['bench',10,74,26,90],['bird',38,24,44,29]]},
+ {id:'bears',name:'Три медведя',w:2091,h:1500,crop:[2,3,94.5,95],icon:'bear',zones:[
+  ['window',3,28,15,57],['broom',2,40,13,85],['door',85,25,96,72],['lamp',48,15,53,24],['crib',64,45,82,64],['table',32,64,70,90],['bear',14,20,40,88],['shebear',39,26,58,68],['cub',55,42,66,62],
+  ['bowl',35,60,45,68],['bowl',46,58,57,66],['bowl',58,61,65,67],['spoon',37,66,46,71],['spoon',58,67,67,71],['chair',67,57,80,85],['chair',45,79,57,95],['girl',89,44,96,72]]},
+ {id:'hood',name:'Красная Шапочка',w:2147,h:1500,crop:[3.5,3,97.5,94],icon:'wolf',zones:[
+  ['tree',0,10,30,85],['tree',75,10,100,80],['fir',50,20,58,40],['treehouse',61,30,80,58],['woodcutter',76,28,92,55],['wolf',18,27,40,64],['redhood',41,42,62,88],['basket',51,64,63,79],['pies',53,65,61,71],
+  ['bird',4,25,12,34],['bird',61,21,68,28],['bird',84,14,90,21],['squirrel',79,58,87,72],['squirrel',89,58,96,67],['mushroom',27,68,33,75],['mushroom',16,77,24,88],['mushroom',70,72,76,80],['mushroom',87,70,93,82],['tulip',7,80,12,88]]}
+];
+TALES.forEach(t=>{
+  const [x0,y0,x1,y1]=t.crop, X=v=>(v-x0)/(x1-x0)*100, Y=v=>(v-y0)/(y1-y0)*100;
+  t.zones=t.zones.map(z=>[z[0],X(z[1]),Y(z[2]),X(z[3]),Y(z[4])]);
+  Object.assign(t,{tale:true,title:true,theme:'',bubble:'b-wood',deco:'leaf'});
+});
+const ALL=SCENES.concat(TALES);
+
+/* ---------- audio: everything through Web Audio so music can be quiet and duck under the voice ---------- */
+const MUSIC=['music/track1.mp3','music/track2.mp3','music/track3.mp3','music/track4.mp3','music/track5.mp3'];
+const MUSIC_VOL=.45, MUSIC_DUCK=.12;
+let actx=null, musicGain=null, voiceGain=null, musicOn=true, mIdx=Math.floor(Math.random()*MUSIC.length), mSrc=null, mLoading=false;
+const buffers={};
+try{ musicOn=localStorage.getItem('music')!=='off'; }catch(e){}
+try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
+function initAudio(){
+  if(actx){ if(actx.state!=='running') actx.resume(); return; }
+  const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+  actx=new AC();
+  musicGain=actx.createGain(); musicGain.gain.value=MUSIC_VOL; musicGain.connect(actx.destination);
+  voiceGain=actx.createGain(); voiceGain.gain.value=1; voiceGain.connect(actx.destination);
+  // iOS unlock: play one silent frame inside the tap
+  const b=actx.createBuffer(1,1,22050), s=actx.createBufferSource(); s.buffer=b; s.connect(actx.destination); s.start(0);
+  if(musicOn) startMusic();
+}
+async function load(url){
+  if(buffers[url]) return buffers[url];
+  const r=await fetch(url); const ab=await r.arrayBuffer();
+  const buf=await new Promise((ok,no)=>actx.decodeAudioData(ab,ok,no));
+  buffers[url]=buf; return buf;
+}
+async function startMusic(){
+  if(!actx||mSrc||mLoading||!musicOn) return;
+  mLoading=true;
+  try{
+    const url=MUSIC[mIdx%MUSIC.length]; const buf=await load(url);
+    mLoading=false; if(!musicOn) return;
+    mSrc=actx.createBufferSource(); mSrc.buffer=buf; mSrc.connect(musicGain);
+    mSrc.onended=()=>{ delete buffers[url]; mSrc=null; mIdx++; if(musicOn) startMusic(); };
+    mSrc.start();
+  }catch(e){ mLoading=false; }
+}
+function stopMusic(){ if(mSrc){ mSrc.onended=null; try{mSrc.stop()}catch(e){} mSrc=null; } }
+function setMusic(on){
+  musicOn=on; try{ localStorage.setItem('music',on?'on':'off'); }catch(e){}
+  document.querySelectorAll('[data-music]').forEach(b=>b.classList.toggle('off',!on));
+  if(on){ initAudio(); startMusic(); } else stopMusic();
+}
+function duck(down){ if(!musicGain) return; const t=actx.currentTime; musicGain.gain.cancelScheduledValues(t); musicGain.gain.setTargetAtTime(down?MUSIC_DUCK:MUSIC_VOL,t,down?.05:.35); }
+document.addEventListener('visibilitychange',()=>{ if(!actx) return; if(document.hidden) actx.suspend(); else actx.resume(); });
+
+let playId=0, vSrc=null;
+const EXTRA={agde:'А где у нас',ok2:'Молодец!',ok3:'Умница!',try:'Попробуй ещё!',hello:'Привет! Нажми на картинку.'};
+const cap=w=>w.charAt(0).toUpperCase()+w.slice(1);
+function textOf(n){ if(EXTRA[n]) return EXTRA[n]; const v=WORDS[n.slice(2)]; return v?cap(v[0]):''; }
+function tts(names){ try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(names.map(textOf).join(' ')); u.lang='ru-RU'; u.rate=.85; speechSynthesis.speak(u);}catch(e){} }
+async function play(names){
+  const id=++playId; stopVoice(false); initAudio();
+  if(!actx){ tts(names); return; }
+  duck(true);
+  for(const n of names){
+    if(id!==playId) return;
+    let buf; try{ buf=await load('voice/'+n+'.mp3'); }catch(e){ continue; }
+    if(id!==playId) return;
+    await new Promise(res=>{ vSrc=actx.createBufferSource(); vSrc.buffer=buf; vSrc.connect(voiceGain); vSrc.onended=res; vSrc.start(); });
+  }
+  if(id===playId){ vSrc=null; duck(false); }
+}
+function stopVoice(full=true){ if(vSrc){ vSrc.onended=null; try{vSrc.stop()}catch(e){} vSrc=null; } if(full){ playId++; duck(false); } }
+const snd=k=>WORDS[k]&&WORDS[k][1]?'w_'+k:'n_'+k;
+function warm(list){ if(!actx) return; list.forEach(n=>load('voice/'+n+'.mp3').catch(()=>{})); }
+
+/* ---------- art bits ---------- */
+const LEAF=`<svg class="leaf" viewBox="0 0 48 40"><path d="M6 34 Q16 22 30 18" stroke="#3E7A22" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M30 18 C30 6 40 2 46 2 C46 12 40 20 30 18Z" fill="#6CC04A"/><path d="M18 26 C12 18 16 10 22 8 C26 14 24 22 18 26Z" fill="#86D25E"/></svg>`;
+const SPRIG=`<svg class="sprig" viewBox="0 0 40 44"><path d="M34 40 Q20 26 10 6" stroke="#3E7A22" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M12 10 C2 10 0 2 2 0 C10 0 14 4 12 10Z" fill="#6CC04A"/><path d="M20 22 C10 26 4 20 4 16 C12 14 18 16 20 22Z" fill="#86D25E"/><path d="M20 20 C20 10 28 6 32 8 C32 16 26 20 20 20Z" fill="#5DB43C"/><path d="M28 34 C20 38 14 34 13 30 C20 28 26 30 28 34Z" fill="#6CC04A"/></svg>`;
+const BACK=`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5l-7.5 7.5 7.5 7.5"/></svg>`;
+const NOTE=`<svg viewBox="0 0 24 24" fill="#fff"><path d="M9 18.5a3 3 0 1 1-2-2.83V5.5l11-2.5v12a3 3 0 1 1-2-2.83V6.6L9 8.2z"/></svg>`;
+const TITLE=txt=>`<div class="tline">${SPRIG}<span class="title">${txt}</span>${SPRIG.replace('class="sprig"','class="sprig r"')}</div>`;
+const MUSICBTN=()=>`<button class="round wood${musicOn?'':' off'}" data-music aria-label="Музыка">${NOTE}</button>`;
+
+/* ---------- screens ---------- */
+const app=document.getElementById('app');
+let scene=null, mode='listen', target=null, stars=0, busy=false, lastK=null;
+
+function home(){
+  scene=null; stopVoice();
+  app.innerHTML=`<div class="home">
+    <div class="head">${TITLE('Что это?')}${MUSICBTN()}</div>
+    <div class="cards">${SCENES.map(card).join('')}</div>
+    <h2>${TITLE('Сказки')}</h2>
+    <div class="cards">${TALES.map(card).join('')}</div>
+  </div>`;
+}
+const card=s=>`<button class="card wood" data-go="${s.id}"><span class="pic" style="background-image:url(bg/${s.id}.webp)"></span><span class="plq wood">${s.name}</span></button>`;
+
+function open(id){
+  scene=ALL.find(s=>s.id===id); target=null; stars=0; busy=false; lastK=null;
+  app.innerHTML=`
+   <div class="backdrop" style="background-image:url(bg/${scene.id}.webp)"></div>
+   <div class="view" id="view"><div class="stage" id="stage"><img class="bg" src="bg/${scene.id}.webp" alt="">
+     ${scene.zones.map(z=>`<button class="z" data-w="${z[0]}" aria-label="${WORDS[z[0]][0]}" style="left:${z[1]}%;top:${z[2]}%;width:${z[3]-z[1]}%;height:${z[4]-z[2]}%"></button>`).join('')}
+   </div></div>
+   <div class="corner tl ${scene.theme}"><button class="back wood" data-home aria-label="Назад">${BACK}</button></div>
+   <div class="corner tr ${scene.theme}">
+     <div class="toggle wood" role="group" aria-label="Режим"><div class="track">
+       <button data-mode="listen" aria-pressed="${mode==='listen'}">Слушай</button>
+       <button data-mode="find" aria-pressed="${mode==='find'}">Найди</button>
+     </div>${LEAF}</div>
+   </div>
+   <div class="corner bl ${scene.theme}"><button class="bubble wood" id="bubble"><span class="ic"><img src="img/${scene.icon}.webp" alt=""></span><span class="bt" id="btext">Нажми на картинку</span></button></div>
+   <div class="corner br ${scene.theme}"><span class="count wood" id="count" hidden><img src="img/star.webp" alt=""><span id="cnum">0</span></span>${MUSICBTN()}</div>`;
+  fit();
+  const ks=[...new Set(scene.zones.map(z=>z[0]))];
+  warm(ks.map(snd).concat(['agde','ok2','ok3','try']));
+  if(mode==='find') startFind(true);
+}
+
+function fit(){
+  const st=document.getElementById('stage'), vw=document.getElementById('view'); if(!st||!scene) return;
+  const W=app.clientWidth, H=app.clientHeight, ar=scene.w/scene.h;
+  let w,h,full=false;
+  if(ar>=1){ h=H; w=H*ar; if(w>W){ w=W; h=W/ar; } full=Math.abs(w-W)<2&&Math.abs(h-H)<2; }
+  else { w=Math.min(W*.6,H*1.2); h=w/ar; }
+  st.classList.toggle('full',full);
+  st.style.width=w+'px'; st.style.height=h+'px'; st.style.left=(W-w)/2+'px';
+  const tall=h>H+1; vw.classList.toggle('py',tall);
+  st.style.top=tall?'0px':(H-h)/2+'px';
+}
+addEventListener('resize',()=>setTimeout(fit,60));
+
+function setBubble(text){
+  const b=document.getElementById('bubble'); if(!b) return;
+  document.getElementById('btext').textContent=text;
+  b.classList.remove('in'); b.getBoundingClientRect(); b.classList.add('in');
+}
+const COLORS=['#FF6B3D','#FFD23F','#5DB43C','#2F9BFF','#7E5BEF','#FF5C9A'];
+function burst(el,word,n){
+  const st=document.getElementById('stage'), r=el.getBoundingClientRect(), s=st.getBoundingClientRect();
+  const cx=r.left+r.width/2-s.left, cy=r.top+r.height/2-s.top, size=Math.max(r.width,r.height)*1.15;
+  const g=document.createElement('span'); g.className='glow'; g.style.cssText=`left:${cx}px;top:${cy}px;width:${size}px;height:${size}px`;
+  st.appendChild(g); setTimeout(()=>g.remove(),850);
+  for(let i=0;i<n;i++){
+    const d=document.createElement('span'); d.className='spark';
+    const a=Math.PI*2*i/n+Math.random()*.5, dist=40+Math.random()*40;
+    d.style.cssText=`left:${cx}px;top:${cy}px;background:${COLORS[i%6]};--dx:${Math.cos(a)*dist}px;--dy:${Math.sin(a)*dist}px`;
+    st.appendChild(d); setTimeout(()=>d.remove(),750);
+  }
+  if(word){
+    st.querySelectorAll('.tag').forEach(t=>t.remove());
+    const t=document.createElement('span'); t.className='tag'; t.textContent=word;
+    t.style.left=Math.min(Math.max(cx,80),s.width-80)+'px'; t.style.top=Math.max(r.top-s.top,50)+'px';
+    st.appendChild(t); setTimeout(()=>t.remove(),1450);
+  }
+}
+
+/* words the child can actually see (not hidden under the corner buttons) */
+function visibleKeys(){
+  const vw=document.getElementById('view'), scroll=vw.classList.contains('py');
+  const W=app.clientWidth, H=app.clientHeight;
+  const blocks=[...document.querySelectorAll('.corner')].map(c=>c.getBoundingClientRect());
+  const ok=new Set();
+  document.querySelectorAll('#stage .z').forEach(z=>{
+    const r=z.getBoundingClientRect(); if(!r.width||!r.height) return;
+    const top=scroll?r.top:Math.max(r.top,0), bot=scroll?r.bottom:Math.min(r.bottom,H);
+    let area=Math.max(0,Math.min(r.right,W)-Math.max(r.left,0))*Math.max(0,bot-top);
+    blocks.forEach(b=>{ area-=Math.max(0,Math.min(r.right,b.right)-Math.max(r.left,b.left))*Math.max(0,Math.min(r.bottom,b.bottom)-Math.max(r.top,b.top)); });
+    if(area/(r.width*r.height)>=.6) ok.add(z.dataset.w);
+  });
+  return [...ok];
+}
+function showZone(k){
+  const vw=document.getElementById('view'), z=document.querySelector(`.z[data-w="${k}"]`); if(!vw||!z||!vw.classList.contains('py')) return;
+  const r=z.getBoundingClientRect(); vw.scrollBy({top:r.top+r.height/2-vw.clientHeight/2,behavior:'smooth'});
+}
+function startFind(silent){
+  let ks=visibleKeys().filter(k=>k!==target);
+  if(!ks.length) ks=[...new Set(scene.zones.map(z=>z[0]))].filter(k=>k!==target);
+  target=ks[Math.floor(Math.random()*ks.length)];
+  setBubble('Где '+WORDS[target][0]+'?');
+  document.getElementById('count').hidden=false; document.getElementById('cnum').textContent=stars;
+  if(!silent) play(['agde','n_'+target]);
+}
+function tap(el){
+  const k=el.dataset.w, word=cap(WORDS[k][0]);
+  if(mode==='listen'){ burst(el,word,10); setBubble(word); lastK=k; play([snd(k)]); return; }
+  if(busy) return;
+  if(!target){ startFind(); return; }
+  if(k===target){
+    busy=true; stars++; burst(el,word+'!',16);
+    document.getElementById('cnum').textContent=stars; setBubble('Молодец! '+word);
+    play([Math.random()<.5?'ok2':'ok3','n_'+k]);
+    setTimeout(()=>{ busy=false; if(scene&&mode==='find') startFind(); },2600);
+  }else{
+    burst(el,word,0); const st=document.getElementById('stage'); st.classList.remove('shake'); st.getBoundingClientRect(); st.classList.add('shake');
+    play(['n_'+k,'try']);
+  }
+}
+
+app.addEventListener('click',e=>{
+  initAudio();
+  if(e.target.closest('[data-music]')){ setMusic(!musicOn); return; }
+  const go=e.target.closest('[data-go]'); if(go){ open(go.dataset.go); return; }
+  if(e.target.closest('[data-home]')){ home(); return; }
+  const m=e.target.closest('[data-mode]');
+  if(m){
+    mode=m.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b===m));
+    if(mode==='find'){ stars=0; target=null; busy=false; startFind(); }
+    else{ target=null; lastK=null; document.getElementById('count').hidden=true; setBubble('Нажми на картинку'); stopVoice(); }
+    return;
+  }
+  if(e.target.closest('#bubble')){
+    if(mode==='find'&&target){
+      play(['agde','n_'+target]); showZone(target);
+      document.querySelectorAll(`.z[data-w="${target}"]`).forEach(z=>{ z.classList.add('hint'); setTimeout(()=>z.classList.remove('hint'),3100); });
+    } else play(lastK?[snd(lastK)]:['hello']);
+    return;
+  }
+  const z=e.target.closest('.z'); if(z) tap(z);
+});
+// first touch anywhere unlocks sound on iOS
+['touchend','pointerup'].forEach(ev=>document.addEventListener(ev,initAudio,{passive:true}));
+
+if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+home();
+</script>
+</body>
+</html>
