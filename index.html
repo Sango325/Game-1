@@ -74,24 +74,27 @@ button:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .tl{top:calc(10px + var(--st));left:calc(12px + var(--sl))}
 .tr{top:calc(10px + var(--st));right:calc(12px + var(--sr))}
 .bl{bottom:calc(10px + var(--sb));left:calc(12px + var(--sl))}
+.bc{bottom:calc(6px + var(--sb));left:50%;transform:translateX(-50%)}
+.tr{flex-direction:column;align-items:flex-end}
 .br{bottom:calc(10px + var(--sb));right:calc(12px + var(--sr))}
 .back,.round{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;flex:none}
 .back svg{width:26px;height:26px;filter:drop-shadow(0 2px 0 rgba(70,30,5,.8))}
 .round svg{width:26px;height:26px;filter:drop-shadow(0 2px 0 rgba(70,30,5,.8))}
 .round.off{filter:saturate(.3) brightness(.85)}
 .toggle{position:relative;display:flex;padding:5px;border-radius:999px}
-.toggle .track{display:flex;border-radius:999px;background:rgba(60,26,6,.55);box-shadow:inset 0 2px 4px rgba(0,0,0,.45);padding:3px}
-.toggle button{padding:8px 14px;border-radius:999px;font-weight:900;font-size:16px;color:#FFF3DF;text-shadow:0 2px 0 rgba(60,25,5,.8)}
+.toggle .track{display:flex;flex-direction:column;gap:2px;border-radius:999px;background:rgba(60,26,6,.55);box-shadow:inset 0 2px 4px rgba(0,0,0,.45);padding:3px}
+.toggle button{padding:9px 12px;border-radius:999px;font-weight:900;font-size:16px;color:#FFF3DF;text-shadow:0 2px 0 rgba(60,25,5,.8)}
 .toggle button[aria-pressed="true"]{background:linear-gradient(#8FDA5A,var(--green) 55%,var(--green-lo));box-shadow:inset 0 2px 0 rgba(230,255,200,.7),0 2px 3px rgba(0,0,0,.35)}
 .purple .toggle .track{background:rgba(40,18,120,.45)}
 .purple .toggle button[aria-pressed="true"]{background:linear-gradient(#B8A2FF,#8C6CF5);box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 2px 3px rgba(0,0,0,.3)}
 .leaf{position:absolute;right:-6px;top:-14px;width:40px;pointer-events:none}
+.tr .count{order:2}
 .count{display:flex;align-items:center;gap:4px;padding:4px 14px 4px 6px;border-radius:999px;color:#FFF3DF;font-weight:900;font-size:20px;text-shadow:0 2px 0 rgba(60,25,5,.8);font-variant-numeric:tabular-nums}
 .count img{width:30px;height:30px}
-.bubble{display:flex;align-items:center;gap:10px;padding:6px 18px 6px 6px;border-radius:999px;max-width:min(46vw,380px)}
-.bubble .ic{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;background:linear-gradient(#7E4220,#5E2F12)}
-.bubble .ic img{width:34px;height:34px}
-.bubble .bt{font-weight:900;font-size:20px;color:#fff;text-shadow:0 2px 0 rgba(40,20,5,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.bubble{display:flex;align-items:center;gap:8px;padding:3px 16px 3px 3px;border-radius:999px;max-width:min(60vw,420px)}
+.bubble .ic{width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;background:linear-gradient(#7E4220,#5E2F12)}
+.bubble .ic img{width:26px;height:26px}
+.bubble .bt{font-weight:900;font-size:18px;color:#fff;text-shadow:0 2px 0 rgba(40,20,5,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .bubble.in{animation:bin .35s cubic-bezier(.3,1.6,.5,1)}
 @keyframes bin{from{transform:scale(.8)}to{transform:scale(1)}}
 
@@ -127,6 +130,7 @@ button:focus-visible{outline:3px solid #fff;outline-offset:3px}
 </div>
 <script>
 const WORDS = {
+ ball:["мяч"],bed:["кровать"],birch:["берёзка"],book:["книга"],clock:["часы", 1],dad:["папа"],dino:["динозаврик"],firewood:["дрова"],kolobok:["колобок"],picture:["картина"],pyramid:["пирамидка"],rug:["коврик"],slide:["горка"],swing:["качели"],teacher:["учитель"],teddy:["мишка"],train:["паровозик"],
  hair:["волосы"],brow:["бровь"],eye:["глаз"],ear:["ухо"],nose:["нос"],cheek:["щёчка"],mouth:["рот"],face:["лицо"],hand:["ладошка"],hoodie:["кофта"],pants:["штанишки"],
  shelf:["полка"],pan:["сковородка"],teapot:["чайник"],salt:["соль"],cup:["чашка"],milk:["молоко"],bread:["хлеб"],plate:["тарелка"],apple:["яблоко"],banana:["банан"],cheese:["сыр"],carrot:["морковка"],spoon:["ложка"],egg:["яйцо"],
  road:["дорога"],cloud:["облако"],sun:["солнышко"],bird:["птичка"],house:["дом"],tree:["дерево"],light:["светофор"],bike:["велосипед"],tulip:["цветок"],butterfly:["бабочка"],dog:["собака",1],car:["машина",1],bus:["автобус"],
@@ -182,15 +186,17 @@ const TALES = [
   ['tree',0,10,30,85],['tree',75,10,100,80],['fir',50,20,58,40],['treehouse',61,30,80,58],['woodcutter',76,28,92,55],['wolf',18,27,40,64],['redhood',41,42,62,88],['basket',51,64,63,79],['pies',53,65,61,71],
   ['bird',4,25,12,34],['bird',61,21,68,28],['bird',84,14,90,21],['squirrel',79,58,87,72],['squirrel',89,58,96,67],['mushroom',27,68,33,75],['mushroom',16,77,24,88],['mushroom',70,72,76,80],['mushroom',87,70,93,82],['tulip',7,80,12,88]]}
 ];
+TALES.push({id:'kolobok',name:'Колобок',w:16,h:9,crop:[0,0,100,100],icon:'smile',zones:[]});
 TALES.forEach(t=>{
   const [x0,y0,x1,y1]=t.crop, X=v=>(v-x0)/(x1-x0)*100, Y=v=>(v-y0)/(y1-y0)*100;
   t.zones=t.zones.map(z=>[z[0],X(z[1]),Y(z[2]),X(z[3]),Y(z[4])]);
   Object.assign(t,{tale:true,title:true,theme:'',bubble:'b-wood',deco:'leaf'});
 });
 const ALL=SCENES.concat(TALES);
-/* places rebuilt as wide landscape pictures */
-const WIDE={"farm": {"w": 2393, "h": 1140, "zones": [["barn", 2.05, 25.96, 17.89, 51.93], ["tractor", 80.03, 31.4, 91.93, 52.98], ["hay", 19.6, 44.91, 28.33, 55.0], ["sheep", 42.92, 45.44, 49.02, 56.93], ["tulip", 33.05, 52.28, 34.94, 57.98], ["sheep", 54.74, 46.14, 61.18, 58.95], ["rooster", 3.51, 62.81, 10.45, 78.95], ["goat", 88.8, 62.63, 95.19, 80.0], ["cow", 15.63, 45.09, 34.31, 80.96], ["horse", 63.18, 42.72, 78.81, 80.96], ["pig", 41.41, 56.93, 54.53, 81.93], ["chick", 56.08, 88.68, 61.85, 95.96], ["chick", 77.52, 89.04, 80.44, 95.96], ["hen", 47.56, 84.21, 52.4, 96.93], ["duck", 65.15, 84.12, 70.83, 96.93]]}, "face": {"w": 2393, "h": 1140, "zones": [["pants", 44.29, 86.67, 55.35, 96.0], ["hoodie", 40.49, 52.0, 59.47, 88.0], ["face", 42.07, 22.67, 58.52, 54.67], ["hair", 39.86, 4.0, 61.05, 25.33], ["ear", 40.18, 34.67, 43.65, 45.33], ["ear", 56.94, 34.67, 60.41, 45.33], ["brow", 44.6, 24.67, 49.03, 30.0], ["brow", 51.24, 24.67, 55.99, 30.0], ["eye", 44.6, 30.0, 49.03, 38.67], ["eye", 51.24, 30.0, 55.67, 38.67], ["cheek", 43.02, 38.0, 47.13, 46.0], ["cheek", 53.46, 38.0, 57.57, 46.0], ["nose", 48.4, 35.33, 51.88, 43.33], ["mouth", 46.5, 43.33, 53.46, 51.33], ["hand", 35.12, 44.67, 42.39, 59.33], ["hand", 57.88, 44.67, 64.84, 59.33]]}, "kitchen": {"w": 2393, "h": 1140, "zones": [["pan", 8.07, 5.96, 21.86, 28.42], ["teapot", 26.03, 5.26, 39.95, 28.42], ["salt", 47.14, 8.51, 52.86, 28.42], ["cup", 9.53, 43.51, 18.43, 58.6], ["milk", 26.7, 40.7, 33.26, 58.6], ["bread", 42.42, 41.93, 51.53, 58.6], ["plate", 61.14, 48.25, 66.82, 58.6], ["spoon", 76.31, 43.51, 83.62, 58.6], ["teapot", 7.73, 61.49, 12.24, 75.96], ["apple", 20.69, 61.67, 27.29, 75.96], ["banana", 34.56, 59.74, 41.41, 75.96], ["cheese", 50.52, 60.26, 57.46, 75.96], ["carrot", 64.69, 60.79, 71.25, 75.96], ["egg", 79.77, 63.68, 84.2, 75.96]]}, "street": {"w": 2392, "h": 1140, "zones": [["cloud", 44.73, 17.81, 45.23, 17.98], ["cloud", 13.5, 13.6, 22.49, 23.95], ["cloud", 66.14, 19.82, 73.83, 33.95], ["sun", 86.62, 21.4, 93.35, 35.96], ["bird", 30.31, 28.51, 33.65, 35.96], ["butterfly", 55.1, 43.95, 58.86, 51.93], ["house", 5.27, 38.86, 14.67, 56.93], ["tree", 22.83, 35.26, 31.15, 56.93], ["light", 40.59, 41.58, 43.35, 60.0], ["tulip", 50.67, 66.05, 53.3, 71.93], ["bike", 65.26, 65.18, 70.69, 73.95], ["dog", 82.82, 64.74, 89.13, 75.96], ["dog", 27.51, 67.11, 32.44, 77.98], ["car", 50.75, 78.68, 61.2, 95.96], ["bus", 76.88, 82.63, 85.12, 95.96]]}, "people": {"w": 2394, "h": 1140, "zones": [["tree", 35.19, 2.5, 64.77, 11.25], ["tree", 45.84, 70.0, 54.12, 86.25], ["treehouse", 37.55, 16.25, 62.4, 51.25], ["fireman", 37.55, 6.25, 45.84, 24.38], ["fireman", 39.62, 28.12, 45.25, 48.75], ["cook", 51.75, 3.75, 59.15, 23.12], ["doctor", 47.91, 30.63, 54.12, 48.12], ["police", 56.49, 28.12, 63.0, 44.38], ["baby", 46.43, 57.5, 51.75, 70.62], ["baby", 51.61, 55.62, 55.01, 65.62], ["mom", 54.71, 51.88, 60.33, 69.38], ["granny", 37.55, 78.12, 43.17, 93.75], ["grandpa", 44.06, 76.88, 49.98, 93.75], ["girl", 53.83, 77.5, 59.15, 93.75], ["boy", 58.85, 78.12, 63.88, 98.75]]}, "zoo": {"w": 2393, "h": 1140, "zones": [["parrot", 39.36, 17.19, 44.59, 30.0], ["monkey", 57.46, 15.35, 66.53, 40.0], ["giraffe", 6.69, 40.18, 17.26, 83.95], ["zebra", 55.54, 53.95, 64.4, 83.95], ["elephant", 29.21, 61.49, 42.71, 85.96], ["lion", 69.45, 63.42, 82.49, 95.0], ["croc", 85.12, 80.61, 98.87, 95.96]]}};
-SCENES.forEach(s=>{ const v=WIDE[s.id]; if(v){ s.w=v.w; s.h=v.h; s.zones=v.zones; } });
+/* all scenes: 16:9 pictures */
+const PICS={"people": {"w": 2181, "h": 1200, "zones": [["tree", 0, 0, 13, 55], ["tree", 87, 0, 100, 55], ["slide", 15, 12, 30, 40], ["swing", 30, 18, 39, 38], ["slide", 61, 20, 80, 38], ["bench", 80, 30, 87, 40], ["fireman", 3, 41, 17, 90], ["cook", 15, 41, 27, 89], ["doctor", 26, 40, 37, 89], ["police", 36, 39, 47, 89], ["teacher", 46, 42, 56, 90], ["mom", 55, 41, 65, 89], ["dad", 64, 36, 77, 89], ["baby", 60, 69, 69, 91], ["granny", 72, 44, 82, 89], ["grandpa", 82, 42, 95, 87], ["girl", 80, 63, 89, 91], ["boy", 90, 62, 99, 91]]}, "zoo": {"w": 2184, "h": 1200, "zones": [["tree", 0, 0, 27, 60], ["palm", 70, 0, 100, 40], ["palm", 0, 38, 15, 70], ["river", 58, 62, 100, 100], ["parrot", 51, 4, 62, 23], ["monkey", 83, 27, 94, 60], ["giraffe", 18, 19, 38, 80], ["elephant", 40, 32, 66, 74], ["zebra", 27, 55, 46, 94], ["lion", 52, 55, 73, 89], ["croc", 72, 74, 95, 96]]}, "repka": {"w": 2168, "h": 1200, "zones": [["treehouse", 57, 0, 94, 44], ["fence", 32, 26, 58, 45], ["fence", 0, 38, 10, 57], ["fence", 77, 35, 100, 50], ["sunflower", 1, 5, 10, 30], ["sunflower", 88, 12, 100, 32], ["turnip", 2, 4, 45, 86], ["grandpa", 40, 26, 55, 84], ["granny", 52, 35, 66, 82], ["granddaughter", 63, 47, 73, 84], ["dog", 73, 55, 84, 81], ["cat", 82, 60, 91, 81], ["mouse", 91, 67, 98, 80], ["bucket", 91, 48, 98, 63], ["wateringcan", 2, 60, 16, 78], ["wateringcan", 2, 79, 15, 98], ["carrot", 60, 84, 70, 99], ["carrot", 85, 84, 98, 99], ["carrot", 14, 93, 22, 100]]}, "teremok": {"w": 2172, "h": 1200, "zones": [["fir", 0, 5, 15, 55], ["fir", 44, 10, 60, 55], ["teremok", 10, 3, 52, 85], ["mouse", 33, 30, 38, 40], ["frog", 16, 58, 23, 67], ["hare", 28, 64, 34, 86], ["wolf", 40, 60, 49, 85], ["fox", 46, 57, 54, 80], ["bear", 67, 28, 94, 93], ["stump", 5, 80, 22, 95], ["stump", 57, 66, 68, 78], ["butterfly", 55, 20, 59, 26], ["butterfly", 59, 30, 62, 36], ["butterfly", 3, 74, 7, 81], ["butterfly", 96, 43, 100, 49], ["tulip", 7, 87, 11, 95]]}, "farm": {"w": 2181, "h": 1200, "zones": [["tree", 0, 0, 17, 40], ["tree", 72, 0, 100, 50], ["barn", 19, 5, 46, 46], ["hay", 12, 20, 30, 47], ["hay", 45, 20, 55, 45], ["fence", 55, 35, 100, 52], ["tractor", 1, 27, 23, 57], ["cow", 10, 45, 37, 89], ["pig", 41, 45, 55, 68], ["horse", 61, 19, 79, 57], ["sheep", 59, 52, 73, 76], ["sheep", 84, 42, 98, 66], ["goat", 76, 52, 94, 92], ["rooster", 33, 68, 46, 96], ["hen", 50, 70, 58, 89], ["duck", 65, 74, 75, 96], ["chick", 47, 86, 52, 96], ["chick", 54, 86, 58, 96], ["chick", 59, 88, 63, 98]]}, "face": {"w": 2184, "h": 1200, "zones": [["rug", 24, 80, 85, 99], ["window", 30, 8, 70, 57], ["bed", 18, 52, 40, 80], ["picture", 20, 17, 25, 42], ["train", 0, 9, 17, 22], ["dino", 9, 30, 19, 47], ["car", 1, 55, 12, 68], ["teddy", 84, 16, 94, 31], ["teddy", 84, 51, 96, 70], ["book", 84, 35, 95, 47], ["ball", 77, 72, 82, 83], ["pyramid", 68, 78, 74, 90], ["car", 59, 74, 68, 86], ["train", 17, 79, 28, 95], ["hair", 42, 22, 58, 33], ["face", 43, 30, 58, 49], ["hand", 34, 37, 41, 50], ["hand", 59, 37, 66, 50], ["hoodie", 39, 48, 63, 77], ["pants", 44, 77, 57, 93], ["eye", 43.5, 39.5, 48.5, 45], ["eye", 51.5, 39.5, 56.5, 45], ["nose", 48, 42, 52, 47], ["mouth", 46.5, 46, 53.5, 50.5]]}, "kitchen": {"w": 2168, "h": 1200, "zones": [["table", 0, 80, 100, 100], ["shelf", 2, 18, 98, 28], ["shelf", 2, 47, 98, 56], ["pan", 2, 8, 29, 23], ["pan", 1, 35, 26, 51], ["teapot", 32, 2, 47, 23], ["salt", 49, 6, 55, 23], ["cup", 57, 9, 67, 23], ["milk", 69, 4, 76, 22], ["bread", 77, 8, 94, 22], ["plate", 78, 36, 94, 50], ["apple", 7, 66, 18, 89], ["banana", 20, 68, 38, 89], ["cheese", 39, 70, 55, 89], ["carrot", 56, 70, 72, 90], ["spoon", 69, 76, 84, 91], ["egg", 85, 71, 94, 88]]}, "street": {"w": 2172, "h": 1200, "zones": [["road", 0, 88, 100, 100], ["cloud", 2, 3, 15, 15], ["cloud", 33, 4, 52, 20], ["cloud", 52, 25, 63, 32], ["cloud", 86, 18, 100, 33], ["sun", 77, 2, 93, 32], ["bird", 61, 10, 72, 27], ["house", 0, 22, 26, 77], ["tree", 17, 7, 40, 57], ["light", 5, 44, 11, 86], ["butterfly", 43, 38, 52, 53], ["tulip", 39, 57, 46, 78], ["bike", 55, 48, 73, 70], ["dog", 75, 55, 85, 73], ["dog", 86, 52, 96, 73], ["car", 12, 78, 32, 99], ["bus", 70, 74, 96, 99]]}, "ryaba": {"w": 2181, "h": 1200, "zones": [["window", 7, 5, 24, 55], ["window", 38, 15, 58, 48], ["stove", 72, 0, 98, 82], ["table", 32, 56, 67, 96], ["bench", 5, 79, 31, 98], ["bench", 66, 72, 75, 90], ["picture", 27, 19, 34, 32], ["nest", 5, 66, 30, 82], ["hen2", 9, 43, 25, 73], ["grandpa", 27, 25, 46, 86], ["granny", 56, 27, 72, 88], ["samovar", 49, 33, 57, 50], ["goldegg", 46, 49, 52, 61], ["clock", 61, 17, 68, 30], ["teapot", 71, 13, 78, 23], ["firewood", 80, 72, 90, 82], ["broom", 90, 45, 98, 85], ["mouse", 25, 82, 31, 98]]}, "bears": {"w": 2184, "h": 1200, "zones": [["door", 6, 12, 17, 91], ["window", 47, 23, 61, 54], ["stove", 74, 10, 91, 58], ["lamp", 49, 0, 59, 22], ["crib", 80, 56, 100, 96], ["table", 35, 62, 70, 93], ["chair", 23, 57, 33, 90], ["chair", 70, 58, 80, 90], ["chair", 49, 82, 59, 100], ["bear", 25, 20, 48, 90], ["shebear", 59, 29, 77, 88], ["cub", 48, 44, 58, 62], ["bowl", 40, 59, 47, 67], ["bowl", 49, 59, 57, 68], ["bowl", 59, 62, 66, 69], ["spoon", 41, 65, 48, 71], ["teddy", 85, 84, 92, 97], ["girl", 7, 48, 15, 85]]}, "hood": {"w": 2168, "h": 1200, "zones": [["tree", 0, 0, 20, 90], ["tree", 84, 0, 100, 85], ["treehouse", 60, 27, 80, 60], ["wolf", 13, 26, 27, 62], ["redhood", 37, 36, 55, 94], ["basket", 37, 68, 47, 84], ["woodcutter", 79, 32, 92, 67], ["squirrel", 86, 1, 96, 20], ["bird", 15, 4, 21, 13], ["butterfly", 52, 19, 56, 27], ["butterfly", 43, 26, 47, 31], ["butterfly", 82, 68, 86, 75], ["butterfly", 95, 53, 99, 61], ["mushroom", 4, 77, 13, 94], ["mushroom", 23, 68, 28, 79], ["mushroom", 77, 76, 82, 90], ["mushroom", 57, 59, 61, 66], ["tulip", 5, 60, 10, 71], ["tulip", 89, 82, 96, 93]]}, "kolobok": {"w": 2172, "h": 1200, "zones": [["birch", 0, 0, 7, 55], ["birch", 94, 0, 100, 48], ["fir", 10, 5, 27, 55], ["treehouse", 68, 3, 96, 44], ["granny", 71, 22, 77, 38], ["grandpa", 77, 22, 84, 38], ["hare", 10, 38, 24, 85], ["wolf", 24, 30, 38, 78], ["bear", 41, 25, 64, 72], ["kolobok", 40, 58, 60, 92], ["fox", 76, 44, 99, 92], ["mushroom", 3, 77, 12, 92], ["mushroom", 73, 83, 79, 97], ["tulip", 92, 85, 97, 93]]}};
+ALL.forEach(s=>{ const v=PICS[s.id]; if(v){ s.w=v.w; s.h=v.h; s.zones=v.zones; } });
+{ const r=SCENES.find(s=>s.id==='face'); if(r){ r.name='Комната'; } }
 
 /* ---------- audio: everything through Web Audio so music can be quiet and duck under the voice ---------- */
 const MUSIC=['music/track1.mp3','music/track2.mp3','music/track3.mp3','music/track4.mp3','music/track5.mp3'];
@@ -286,13 +292,14 @@ function open(id){
    <div class="view" id="view">${stagesHTML()}</div>
    <div class="corner tl ${scene.theme}"><button class="back wood" data-home aria-label="Назад">${BACK}</button></div>
    <div class="corner tr ${scene.theme}">
+     <span class="count wood" id="count" hidden><img src="img/star.webp" alt=""><span id="cnum">0</span></span>
      <div class="toggle wood" role="group" aria-label="Режим"><div class="track">
        <button data-mode="listen" aria-pressed="${mode==='listen'}">Слушай</button>
        <button data-mode="find" aria-pressed="${mode==='find'}">Найди</button>
      </div>${LEAF}</div>
    </div>
-   <div class="corner bl ${scene.theme}"><button class="bubble wood" id="bubble"><span class="ic"><img src="img/${scene.icon}.webp" alt=""></span><span class="bt" id="btext">Нажми на картинку</span></button></div>
-   <div class="corner br ${scene.theme}"><span class="count wood" id="count" hidden><img src="img/star.webp" alt=""><span id="cnum">0</span></span>${MUSICBTN()}</div>`;
+   <div class="corner bc ${scene.theme}"><button class="bubble wood" id="bubble"><span class="ic"><img src="img/${scene.icon}.webp" alt=""></span><span class="bt" id="btext">Нажми на картинку</span></button></div>
+   <div class="corner br ${scene.theme}">${MUSICBTN()}</div>`;
   fit();
   const ks=[...new Set(scene.zones.map(z=>z[0]))];
   warm(ks.map(snd).concat(['agde','ok2','ok3','try']));
@@ -322,7 +329,13 @@ function fit(){
     halves.forEach((p,i)=>{ const ph=fr[i]*scene.h*k; p.style.width=pw+'px'; p.style.height=ph+'px'; p.style.left=(x0+i*(pw+gap))+'px'; p.style.top=(H-ph)/2+'px'; });
     vw.classList.remove('py'); return;
   }
-  if(ar>=1){ h=H; w=H*ar; if(w>W){ w=W; h=W/ar; } full=Math.abs(w-W)<2&&Math.abs(h-H)<2; }
+  if(ar>=1){
+    const side=Math.max(...[...document.querySelectorAll('.corner.tl,.corner.tr,.corner.br')].map(c=>c.offsetWidth))+20;
+    const bot=document.querySelector('.corner.bc').offsetHeight+10;
+    h=H-bot-6; w=h*ar; if(w>W-2*side){ w=W-2*side; h=w/ar; }
+    st.style.width=w+'px'; st.style.height=h+'px'; st.style.left=(W-w)/2+'px'; st.style.top=Math.max(6,(H-bot-h)/2)+'px';
+    st.classList.remove('full'); vw.classList.remove('py'); return;
+  }
   else { w=Math.min(W*.6,H*1.2); h=w/ar; }
   st.classList.toggle('full',full);
   st.style.width=w+'px'; st.style.height=h+'px'; st.style.left=(W-w)/2+'px';
