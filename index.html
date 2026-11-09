@@ -74,7 +74,7 @@ button:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .tl{top:calc(10px + var(--st));left:calc(12px + var(--sl))}
 .tr{top:calc(10px + var(--st));right:calc(12px + var(--sr))}
 .bl{bottom:calc(10px + var(--sb));left:calc(12px + var(--sl))}
-.bc{bottom:calc(6px + var(--sb));left:50%;transform:translateX(-50%)}
+.bc{top:calc(10px + var(--st));left:50%;transform:translateX(-50%)}
 .tr{flex-direction:column;align-items:flex-end}
 .br{bottom:calc(10px + var(--sb));right:calc(12px + var(--sr))}
 .back,.round{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;flex:none}
@@ -82,8 +82,8 @@ button:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .round svg{width:26px;height:26px;filter:drop-shadow(0 2px 0 rgba(70,30,5,.8))}
 .round.off{filter:saturate(.3) brightness(.85)}
 .toggle{position:relative;display:flex;padding:5px;border-radius:999px}
-.toggle .track{display:flex;flex-direction:column;gap:2px;border-radius:999px;background:rgba(60,26,6,.55);box-shadow:inset 0 2px 4px rgba(0,0,0,.45);padding:3px}
-.toggle button{padding:9px 12px;border-radius:999px;font-weight:900;font-size:16px;color:#FFF3DF;text-shadow:0 2px 0 rgba(60,25,5,.8)}
+.toggle .track{display:flex;border-radius:999px;background:rgba(60,26,6,.55);box-shadow:inset 0 2px 4px rgba(0,0,0,.45);padding:3px}
+.toggle button{padding:8px 14px;border-radius:999px;font-weight:900;font-size:16px;color:#FFF3DF;text-shadow:0 2px 0 rgba(60,25,5,.8)}
 .toggle button[aria-pressed="true"]{background:linear-gradient(#8FDA5A,var(--green) 55%,var(--green-lo));box-shadow:inset 0 2px 0 rgba(230,255,200,.7),0 2px 3px rgba(0,0,0,.35)}
 .purple .toggle .track{background:rgba(40,18,120,.45)}
 .purple .toggle button[aria-pressed="true"]{background:linear-gradient(#B8A2FF,#8C6CF5);box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 2px 3px rgba(0,0,0,.3)}
@@ -298,7 +298,7 @@ function open(id){
        <button data-mode="find" aria-pressed="${mode==='find'}">Найди</button>
      </div>${LEAF}</div>
    </div>
-   <div class="corner bc ${scene.theme}"><button class="bubble wood" id="bubble"><span class="ic"><img src="img/${scene.icon}.webp" alt=""></span><span class="bt" id="btext">Нажми на картинку</span></button></div>
+   <div class="corner bc ${scene.theme}"${mode==='find'?'':' hidden'}><button class="bubble wood" id="bubble"><span class="ic"><img src="img/${scene.icon}.webp" alt=""></span><span class="bt" id="btext">Нажми на картинку</span></button></div>
    <div class="corner br ${scene.theme}">${MUSICBTN()}</div>`;
   fit();
   const ks=[...new Set(scene.zones.map(z=>z[0]))];
@@ -330,10 +330,8 @@ function fit(){
     vw.classList.remove('py'); return;
   }
   if(ar>=1){
-    const side=Math.max(...[...document.querySelectorAll('.corner.tl,.corner.tr,.corner.br')].map(c=>c.offsetWidth))+20;
-    const bot=document.querySelector('.corner.bc').offsetHeight+10;
-    h=H-bot-6; w=h*ar; if(w>W-2*side){ w=W-2*side; h=w/ar; }
-    st.style.width=w+'px'; st.style.height=h+'px'; st.style.left=(W-w)/2+'px'; st.style.top=Math.max(6,(H-bot-h)/2)+'px';
+    h=H-8; w=h*ar; if(w>W-8){ w=W-8; h=w/ar; }
+    st.style.width=w+'px'; st.style.height=h+'px'; st.style.left=(W-w)/2+'px'; st.style.top=(H-h)/2+'px';
     st.classList.remove('full'); vw.classList.remove('py'); return;
   }
   else { w=Math.min(W*.6,H*1.2); h=w/ar; }
@@ -421,6 +419,7 @@ app.addEventListener('click',e=>{
   if(m){
     mode=m.dataset.mode;
     document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b===m));
+    document.querySelector('.corner.bc').hidden = mode!=='find';
     if(mode==='find'){ stars=0; target=null; busy=false; startFind(); }
     else{ target=null; lastK=null; document.getElementById('count').hidden=true; setBubble('Нажми на картинку'); stopVoice(); }
     return;
