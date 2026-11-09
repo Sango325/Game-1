@@ -188,6 +188,9 @@ TALES.forEach(t=>{
   Object.assign(t,{tale:true,title:true,theme:'',bubble:'b-wood',deco:'leaf'});
 });
 const ALL=SCENES.concat(TALES);
+/* places rebuilt as wide landscape pictures */
+const WIDE={"farm": {"w": 2393, "h": 1140, "zones": [["barn", 2.05, 25.96, 17.89, 51.93], ["tractor", 80.03, 31.4, 91.93, 52.98], ["hay", 19.6, 44.91, 28.33, 55.0], ["sheep", 42.92, 45.44, 49.02, 56.93], ["tulip", 33.05, 52.28, 34.94, 57.98], ["sheep", 54.74, 46.14, 61.18, 58.95], ["rooster", 3.51, 62.81, 10.45, 78.95], ["goat", 88.8, 62.63, 95.19, 80.0], ["cow", 15.63, 45.09, 34.31, 80.96], ["horse", 63.18, 42.72, 78.81, 80.96], ["pig", 41.41, 56.93, 54.53, 81.93], ["chick", 56.08, 88.68, 61.85, 95.96], ["chick", 77.52, 89.04, 80.44, 95.96], ["hen", 47.56, 84.21, 52.4, 96.93], ["duck", 65.15, 84.12, 70.83, 96.93]]}, "face": {"w": 2393, "h": 1140, "zones": [["pants", 44.29, 86.67, 55.35, 96.0], ["hoodie", 40.49, 52.0, 59.47, 88.0], ["face", 42.07, 22.67, 58.52, 54.67], ["hair", 39.86, 4.0, 61.05, 25.33], ["ear", 40.18, 34.67, 43.65, 45.33], ["ear", 56.94, 34.67, 60.41, 45.33], ["brow", 44.6, 24.67, 49.03, 30.0], ["brow", 51.24, 24.67, 55.99, 30.0], ["eye", 44.6, 30.0, 49.03, 38.67], ["eye", 51.24, 30.0, 55.67, 38.67], ["cheek", 43.02, 38.0, 47.13, 46.0], ["cheek", 53.46, 38.0, 57.57, 46.0], ["nose", 48.4, 35.33, 51.88, 43.33], ["mouth", 46.5, 43.33, 53.46, 51.33], ["hand", 35.12, 44.67, 42.39, 59.33], ["hand", 57.88, 44.67, 64.84, 59.33]]}, "kitchen": {"w": 2393, "h": 1140, "zones": [["pan", 8.07, 5.96, 21.86, 28.42], ["teapot", 26.03, 5.26, 39.95, 28.42], ["salt", 47.14, 8.51, 52.86, 28.42], ["cup", 9.53, 43.51, 18.43, 58.6], ["milk", 26.7, 40.7, 33.26, 58.6], ["bread", 42.42, 41.93, 51.53, 58.6], ["plate", 61.14, 48.25, 66.82, 58.6], ["spoon", 76.31, 43.51, 83.62, 58.6], ["teapot", 7.73, 61.49, 12.24, 75.96], ["apple", 20.69, 61.67, 27.29, 75.96], ["banana", 34.56, 59.74, 41.41, 75.96], ["cheese", 50.52, 60.26, 57.46, 75.96], ["carrot", 64.69, 60.79, 71.25, 75.96], ["egg", 79.77, 63.68, 84.2, 75.96]]}, "street": {"w": 2392, "h": 1140, "zones": [["cloud", 44.73, 17.81, 45.23, 17.98], ["cloud", 13.5, 13.6, 22.49, 23.95], ["cloud", 66.14, 19.82, 73.83, 33.95], ["sun", 86.62, 21.4, 93.35, 35.96], ["bird", 30.31, 28.51, 33.65, 35.96], ["butterfly", 55.1, 43.95, 58.86, 51.93], ["house", 5.27, 38.86, 14.67, 56.93], ["tree", 22.83, 35.26, 31.15, 56.93], ["light", 40.59, 41.58, 43.35, 60.0], ["tulip", 50.67, 66.05, 53.3, 71.93], ["bike", 65.26, 65.18, 70.69, 73.95], ["dog", 82.82, 64.74, 89.13, 75.96], ["dog", 27.51, 67.11, 32.44, 77.98], ["car", 50.75, 78.68, 61.2, 95.96], ["bus", 76.88, 82.63, 85.12, 95.96]]}, "people": {"w": 2394, "h": 1140, "zones": [["tree", 35.19, 2.5, 64.77, 11.25], ["tree", 45.84, 70.0, 54.12, 86.25], ["treehouse", 37.55, 16.25, 62.4, 51.25], ["fireman", 37.55, 6.25, 45.84, 24.38], ["fireman", 39.62, 28.12, 45.25, 48.75], ["cook", 51.75, 3.75, 59.15, 23.12], ["doctor", 47.91, 30.63, 54.12, 48.12], ["police", 56.49, 28.12, 63.0, 44.38], ["baby", 46.43, 57.5, 51.75, 70.62], ["baby", 51.61, 55.62, 55.01, 65.62], ["mom", 54.71, 51.88, 60.33, 69.38], ["granny", 37.55, 78.12, 43.17, 93.75], ["grandpa", 44.06, 76.88, 49.98, 93.75], ["girl", 53.83, 77.5, 59.15, 93.75], ["boy", 58.85, 78.12, 63.88, 98.75]]}, "zoo": {"w": 2393, "h": 1140, "zones": [["parrot", 39.36, 17.19, 44.59, 30.0], ["monkey", 57.46, 15.35, 66.53, 40.0], ["giraffe", 6.69, 40.18, 17.26, 83.95], ["zebra", 55.54, 53.95, 64.4, 83.95], ["elephant", 29.21, 61.49, 42.71, 85.96], ["lion", 69.45, 63.42, 82.49, 95.0], ["croc", 85.12, 80.61, 98.87, 95.96]]}};
+SCENES.forEach(s=>{ const v=WIDE[s.id]; if(v){ s.w=v.w; s.h=v.h; s.zones=v.zones; } });
 
 /* ---------- audio: everything through Web Audio so music can be quiet and duck under the voice ---------- */
 const MUSIC=['music/track1.mp3','music/track2.mp3','music/track3.mp3','music/track4.mp3','music/track5.mp3'];
@@ -280,9 +283,7 @@ function open(id){
   scene=ALL.find(s=>s.id===id); target=null; stars=0; busy=false; lastK=null;
   app.innerHTML=`
    <div class="backdrop" style="background-image:url(bg/${scene.id}.webp)"></div>
-   <div class="view" id="view"><div class="stage" id="stage"><img class="bg" src="bg/${scene.id}.webp" alt="">
-     ${scene.zones.map(z=>`<button class="z" data-w="${z[0]}" aria-label="${WORDS[z[0]][0]}" style="left:${z[1]}%;top:${z[2]}%;width:${z[3]-z[1]}%;height:${z[4]-z[2]}%"></button>`).join('')}
-   </div></div>
+   <div class="view" id="view">${stagesHTML()}</div>
    <div class="corner tl ${scene.theme}"><button class="back wood" data-home aria-label="Назад">${BACK}</button></div>
    <div class="corner tr ${scene.theme}">
      <div class="toggle wood" role="group" aria-label="Режим"><div class="track">
@@ -298,10 +299,29 @@ function open(id){
   if(mode==='find') startFind(true);
 }
 
+/* tall pictures are cut into two halves shown side by side, so the whole scene fits a landscape screen */
+const SPLIT={};
+const zoneBtn=(z,y0,y1)=>{ const k=100/(y1-y0), t=Math.max(z[2],y0), b=Math.min(z[4],y1);
+  return `<button class="z" data-w="${z[0]}" aria-label="${WORDS[z[0]][0]}" style="left:${z[1]}%;top:${(t-y0)*k}%;width:${z[3]-z[1]}%;height:${(b-t)*k}%"></button>`; };
+function stagesHTML(){
+  const sp=SPLIT[scene.id];
+  if(!sp) return `<div class="stage" id="stage"><img class="bg" src="bg/${scene.id}.webp" alt="">${scene.zones.map(z=>zoneBtn(z,0,100)).join('')}</div>`;
+  return [[sp[0],sp[1]],[sp[1],sp[2]]].map(([a,b],i)=>`<div class="stage half" data-a="${a}" data-b="${b}"${i?'':' id="stage"'}>
+    <img class="bg" src="bg/${scene.id}.webp" alt="" style="inset:auto;left:0;width:100%;top:${-a/(b-a)*100}%;height:${100/(b-a)*100}%">
+    ${scene.zones.filter(z=>{ const c=(z[2]+z[4])/2; return i?c>=a:c<b; }).map(z=>zoneBtn(z,a,b)).join('')}</div>`).join('');
+}
 function fit(){
   const st=document.getElementById('stage'), vw=document.getElementById('view'); if(!st||!scene) return;
   const W=app.clientWidth, H=app.clientHeight, ar=scene.w/scene.h;
   let w,h,full=false;
+  const halves=[...document.querySelectorAll('.stage.half')];
+  if(halves.length){
+    const gap=16, m=8, fr=halves.map(p=>(p.dataset.b-p.dataset.a)/100);
+    const k=Math.min((W-2*m-gap)/(2*scene.w),(H-2*m)/(Math.max(...fr)*scene.h));
+    const pw=scene.w*k, x0=(W-(2*pw+gap))/2;
+    halves.forEach((p,i)=>{ const ph=fr[i]*scene.h*k; p.style.width=pw+'px'; p.style.height=ph+'px'; p.style.left=(x0+i*(pw+gap))+'px'; p.style.top=(H-ph)/2+'px'; });
+    vw.classList.remove('py'); return;
+  }
   if(ar>=1){ h=H; w=H*ar; if(w>W){ w=W; h=W/ar; } full=Math.abs(w-W)<2&&Math.abs(h-H)<2; }
   else { w=Math.min(W*.6,H*1.2); h=w/ar; }
   st.classList.toggle('full',full);
@@ -318,7 +338,7 @@ function setBubble(text){
 }
 const COLORS=['#FF6B3D','#FFD23F','#5DB43C','#2F9BFF','#7E5BEF','#FF5C9A'];
 function burst(el,word,n){
-  const st=document.getElementById('stage'), r=el.getBoundingClientRect(), s=st.getBoundingClientRect();
+  const st=el.closest('.stage'), r=el.getBoundingClientRect(), s=st.getBoundingClientRect();
   const cx=r.left+r.width/2-s.left, cy=r.top+r.height/2-s.top, size=Math.max(r.width,r.height)*1.15;
   const g=document.createElement('span'); g.className='glow'; g.style.cssText=`left:${cx}px;top:${cy}px;width:${size}px;height:${size}px`;
   st.appendChild(g); setTimeout(()=>g.remove(),850);
@@ -342,7 +362,7 @@ function visibleKeys(){
   const W=app.clientWidth, H=app.clientHeight;
   const blocks=[...document.querySelectorAll('.corner')].map(c=>c.getBoundingClientRect());
   const ok=new Set();
-  document.querySelectorAll('#stage .z').forEach(z=>{
+  document.querySelectorAll('.stage .z').forEach(z=>{
     const r=z.getBoundingClientRect(); if(!r.width||!r.height) return;
     const top=scroll?r.top:Math.max(r.top,0), bot=scroll?r.bottom:Math.min(r.bottom,H);
     let area=Math.max(0,Math.min(r.right,W)-Math.max(r.left,0))*Math.max(0,bot-top);
@@ -374,7 +394,7 @@ function tap(el){
     play([Math.random()<.5?'ok2':'ok3','n_'+k]);
     setTimeout(()=>{ busy=false; if(scene&&mode==='find') startFind(); },2600);
   }else{
-    burst(el,word,0); const st=document.getElementById('stage'); st.classList.remove('shake'); st.getBoundingClientRect(); st.classList.add('shake');
+    burst(el,word,0); const st=el.closest('.stage'); st.classList.remove('shake'); st.getBoundingClientRect(); st.classList.add('shake');
     play(['n_'+k,'try']);
   }
 }
